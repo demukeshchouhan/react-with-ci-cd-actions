@@ -5,6 +5,7 @@ on:
       - opened
     branches:
       - main
+      - "feature/**"
     paths:
       - "src/core/**"
   push:
