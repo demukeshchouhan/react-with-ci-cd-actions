@@ -21,5 +21,11 @@ jobs:
           path: |
             dist
             package.json
+      - name: Get Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-files
+      - name: Output Content
+        run: ls
       - name: Deploy code
         run: echo "Deploying code..."
