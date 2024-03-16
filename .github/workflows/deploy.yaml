@@ -45,8 +45,37 @@ jobs:
       - name: Run Tests
         run: npm test
 
-  deploy:
+  build:
     needs: [lint, test]
+    runs-on: ubuntu-latest
+    outputs:
+      script-file: ${{ steps.publish.outputs.script-file }}
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v4
+      - name: Install Nodejs
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install dependencies
+        run: npm ci
+      - name: Build Code
+        run: npm run build
+      - name: Publish JS filename
+        id: publish
+        run: find dist/assets/*.js -type f --execdir echo 'script-file={}' >> $GITHUB_OUTPUT ';'
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-files
+          path: dist
+      - name: Get Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-files
+
+  deploy:
+    needs: [lint, test, build]
     runs-on: ubuntu-latest
     steps:
       - name: Get Code
@@ -59,5 +88,7 @@ jobs:
         run: npm ci
       - name: Build Project
         run: npm run build
+      - name: Output Filename
+        run: echo "${{ needs.build.outputs.script-file }}"
       - name: Deploy
         run: echo "Deploying..."
