@@ -15,9 +15,12 @@ on:
       - "feature/**" # feature/new #feature/new/button
     # paths-ignore:
     #   - ".github/workflows/*"
-
+env:
+  MONGODB_URL: gha-ds
 jobs:
   lint:
+    env:
+      TEST_VAL: "this is testing env."
     runs-on: ubuntu-latest
     steps:
       - name: Get Code
@@ -31,6 +34,8 @@ jobs:
         run: npm ci
       - name: Lint Code
         run: npm run lint
+      - name: env var output
+        run: echo "TEST_VAL = ${{env.MONGODB_URL}}"
   test:
     needs: [lint]
     runs-on: ubuntu-latest
