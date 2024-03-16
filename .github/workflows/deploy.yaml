@@ -22,10 +22,16 @@ jobs:
     steps:
       - name: Get Code
         uses: actions/checkout@v4
-      - name: Install Nodejs
-        uses: actions/setup-node@v4
+      - name: Cache Dependencies
+        uses: actions/cache@v4
         with:
-          node-version: 20
+          path: ~/.npm
+          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Cache Dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
         run: npm ci
       - name: Lint Code
@@ -36,10 +42,11 @@ jobs:
     steps:
       - name: Get Code
         uses: actions/checkout@v4
-      - name: Install Nodejs
-        uses: actions/setup-node@v4
+      - name: Cache Dependencies
+        uses: actions/cache@v4
         with:
-          node-version: 20
+          path: ~/.npm
+          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
         run: npm ci
       - name: Run Tests
@@ -53,10 +60,11 @@ jobs:
     steps:
       - name: Get Code
         uses: actions/checkout@v4
-      - name: Install Nodejs
-        uses: actions/setup-node@v4
+      - name: Cache Dependencies
+        uses: actions/cache@v4
         with:
-          node-version: 20
+          path: ~/.npm
+          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
         run: npm ci
       - name: Build Code
@@ -80,10 +88,11 @@ jobs:
     steps:
       - name: Get Code
         uses: actions/checkout@v4
-      - name: Install Nodejs
-        uses: actions/setup-node@v4
+      - name: Cache Dependencies
+        uses: actions/cache@v4
         with:
-          node-version: 20
+          path: ~/.npm
+          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
         run: npm ci
       - name: Build Project
