@@ -6,6 +6,6 @@ import App from "./App";
 describe("App Component", () => {
   it("should render component", () => {
     render(<App />);
-    expect(screen.getByRole("button")).not.toBeInTheDocument();
+    expect(screen.getByRole("button")).toBeInTheDocument();
   });
 });
