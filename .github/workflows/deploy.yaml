@@ -19,6 +19,7 @@ env:
   MONGODB_URL: gha-ds
 jobs:
   lint:
+    environment: testing
     env:
       TEST_VAL: "this is testing env."
     runs-on: ubuntu-latest
@@ -35,7 +36,9 @@ jobs:
       - name: Lint Code
         run: npm run lint
       - name: env var output
-        run: echo "TEST_VAL = ${{env.MONGODB_URL}}"
+        run: |
+          echo "TEST_VAL = ${{env.MONGODB_URL}}"
+          echo "TEST_ENV_VAR = ${{secrets.TEST_ENV_VAR}}"
   test:
     needs: [lint]
     runs-on: ubuntu-latest
@@ -68,11 +71,13 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Build Code
+        id: build-code
         run: npm run build
       - name: Publish JS filename
         id: publish
         run: find dist/assets/*.js -type f -execdir echo 'script-file={}' >> $GITHUB_OUTPUT ';'
       - name: Upload Artifacts
+        if: failure() && steps.build-code.outcome == 'failure'
         uses: actions/upload-artifact@v4
         with:
           name: dist-files
