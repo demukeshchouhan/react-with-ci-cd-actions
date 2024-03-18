@@ -53,7 +53,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Run Tests
+        id: run-test
         run: npm test
+      - name: Upload Test Report
+        if: failure() && steps.run-test.outcome == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report
+          path: test.json
 
   build:
     needs: [lint, test]
@@ -77,7 +84,6 @@ jobs:
         id: publish
         run: find dist/assets/*.js -type f -execdir echo 'script-file={}' >> $GITHUB_OUTPUT ';'
       - name: Upload Artifacts
-        if: failure() && steps.build-code.outcome == 'failure'
         uses: actions/upload-artifact@v4
         with:
           name: dist-files

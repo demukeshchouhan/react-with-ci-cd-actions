@@ -9,5 +9,6 @@ export default defineConfig({
     environment: "jsdom",
     setupFiles: "./src/test/setup.js",
     include: ["**/*.spec.js(x)"],
+    outputFile: " test.json",
   },
 });
