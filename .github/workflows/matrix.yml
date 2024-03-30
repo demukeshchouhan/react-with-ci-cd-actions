@@ -10,6 +10,9 @@ jobs:
         include:
           - node-version: 18
             operating-system: windows-latest
+        exclude:
+          - node-version: 16
+            operating-system: ubuntu-latest
     runs-on: ${{ matrix.operating-system }}
     steps:
       - name: Get Code
